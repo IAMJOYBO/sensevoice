@@ -1,13 +1,17 @@
 services:
   sensevoice:
-    image: registry.cn-hangzhou.aliyuncs.com/joybo/sensevoice:v2025.4.13-action
+    image: registry.cn-hangzhou.aliyuncs.com/joybo/sensevoice:v2025.04.13-action
     container_name: sensevoice
     hostname: sensevoice
     environment:
       - TZ=Asia/Shanghai
+      - HF_HOME=/app
+      - MODELSCOPE_CACHE=/app
       # - NVIDIA_VISIBLE_DEVICES=0
     volumes:
       - ./:/app/sensevoice
+      - E:\Hub\huggingface:/app/huggingface
+      - E:\Hub\modelscope:/app/modelscope
     ports:
       - "50000:50000"
     runtime: nvidia
