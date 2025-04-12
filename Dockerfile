@@ -1,65 +1,21 @@
-# FROM pytorch/pytorch:2.5.1-cuda12.1-cudnn9-devel as compile_server
-FROM pytorch/pytorch:2.6.0-cuda12.6-cudnn9-devel as compile_server
+FROM nvcr.io/nvidia/pytorch:25.03-py3
 
-ARG CPU_INSTRUCT=NATIVE
+EXPOSE 28000
 
-# 设置工作目录和 CUDA 路径
-WORKDIR /workspace
-ENV CUDA_HOME=/usr/local/cuda
+ENV TZ=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && apt update && apt install python3-tk -y
 
-# 安装依赖
-RUN apt update -y && apt install -y apt-utils && apt upgrade -y
-RUN apt install -y --no-install-recommends \
-    libtbb-dev \
-    libssl-dev \
-    libcurl4-openssl-dev \
-    libaio1 \
-    libaio-dev \
-    libfmt-dev \
-    libgflags-dev \
-    zlib1g-dev \
-    patchelf \
-    git \
-    wget \
-    vim \
-    gcc \
-    g++
+RUN mkdir /app
 
-# 安装CMake
-RUN wget https://github.com/Kitware/CMake/releases/download/v4.0.1/cmake-4.0.1-linux-x86_64.sh && echo y | bash cmake-4.0.1-linux-x86_64.sh && rm -rf cmake-4.0.1-linux-x86_64.sh
+WORKDIR /app
+RUN git clone --recurse-submodules https://github.com/Akegarasu/lora-scripts
 
-# 克隆代码
-RUN git clone https://github.com/kvcache-ai/ktransformers.git 
-# 清理 apt 缓存
-RUN rm -rf /var/lib/apt/lists/*
+WORKDIR /app/lora-scripts
+RUN pip install xformers==0.0.27.post2 --no-deps && pip install -r requirements.txt
 
-# 进入项目目录
-WORKDIR /workspace/ktransformers
-# 初始化子模块
-RUN git submodule update --init --recursive
+WORKDIR /app/lora-scripts/scripts
+RUN pip install -r requirements.txt
 
-# 升级 pip
-RUN pip install --upgrade pip && pip install -U wheel setuptools
+WORKDIR /app/lora-scripts
 
-# 安装构建依赖
-RUN pip install ninja pyproject numpy cpufeature aiohttp zmq openai
-
-# 安装 flash-attn（提前装可以避免后续某些编译依赖出错）
-RUN pip install flash-attn
-
-# 安装 ktransformers 本体（含编译）
-RUN CPU_INSTRUCT=${CPU_INSTRUCT} \
-    USE_BALANCE_SERVE=1 \
-    KTRANSFORMERS_FORCE_BUILD=TRUE \
-    TORCH_CUDA_ARCH_LIST="8.0;8.6;8.7;8.9;9.0+PTX" \
-    pip install . --no-build-isolation --verbose
-
-RUN pip install third_party/custom_flashinfer/
-# 清理 pip 缓存
-RUN pip cache purge
-
-# 拷贝 C++ 运行时库
-RUN cp /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /opt/conda/lib/
-
-# 保持容器运行（调试用）
-ENTRYPOINT ["tail", "-f", "/dev/null"]
+CMD ["python", "gui.py", "--listen"]
