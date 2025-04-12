@@ -1,4 +1,4 @@
-FROM nvcr.io/nvidia/pytorch:25.03-py3
+FROM pytorch/pytorch:2.4.1-cuda12.4-cudnn9-devel
 
 EXPOSE 28000
 
@@ -11,11 +11,8 @@ WORKDIR /app
 RUN git clone --recurse-submodules https://github.com/Akegarasu/lora-scripts
 
 WORKDIR /app/lora-scripts
-RUN pip uninstall -y einops && pip install xformers==0.0.27.post2 --no-deps && pip install -U -r requirements.txt
-
-RUN pip install opencv-fixer==0.2.5 && python -c "from opencv_fixer import AutoFix; AutoFix()" \
-    pip install opencv-python-headless && apt install ffmpeg libsm6 libxext6 libgl1 -y
-
-WORKDIR /app/lora-scripts
+RUN pip install -U pip
+RUN pip install torch==2.4.1+cu124 torchvision==0.19.1+cu124 xformers --extra-index-url https://download.pytorch.org/whl/cu124
+RUN pip install -U setuptools wheel && pip install --upgrade -r requirements.txt
 
 CMD ["python", "gui.py", "--listen"]
