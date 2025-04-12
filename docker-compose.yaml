@@ -10,8 +10,9 @@ services:
       # - NVIDIA_VISIBLE_DEVICES=0
     volumes:
       - ./:/app/sensevoice
-      - E:\Hub\huggingface:/app/huggingface
-      - E:\Hub\modelscope:/app/modelscope
+      - O:\Hub\modelscope\hub\models:/app/models
+      - O:\Hub\huggingface:/app/huggingface
+      - O:\Hub\modelscope:/app/modelscope
     ports:
       - "50000:50000"
     runtime: nvidia
