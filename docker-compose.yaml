@@ -1,15 +1,15 @@
 services:
-  ktransformers:
-    image: registry.cn-hangzhou.aliyuncs.com/joybo/ktransformers:v2025.4.12-action
-    container_name: ktransformers
-    hostname: ktransformers
+  lota-scripts:
+    image: registry.cn-hangzhou.aliyuncs.com/joybo/lota-scripts:v2025.4.12-action
+    container_name: lota-scripts
+    hostname: lota-scripts
     environment:
       - TZ=Asia/Shanghai
       # - NVIDIA_VISIBLE_DEVICES=0
     volumes:
-      - ./DeepSeek-V2-Lite-GGUF:./model/DeepSeek-V2-Lite-GGUF
+      - ./:./app/lora-scripts
     ports:
-      - "10002:10002"
+      - "28000:28000"
     runtime: nvidia
     deploy:
       resources:
@@ -22,10 +22,9 @@ services:
     tty: true
     restart: no
     networks:
-      - ktransformers
-    command: ktransformers --model_path /app/model/deepseek-ai/DeepSeek-V2-Lite-Chat --gguf_path /app/model/DeepSeek-V2-Lite-GGUF  --port 10002 --web True
+      - lora-scripts
 
 networks:
-  ktransformers:
+  lora-scripts:
     driver: bridge
-    name: ktransformers
+    name: lora-scripts
