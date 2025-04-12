@@ -14,7 +14,7 @@ services:
       - O:\Hub\huggingface:/app/huggingface
       - O:\Hub\modelscope:/app/modelscope
     ports:
-      - "50000:50000"
+      - "7860:7860"
     runtime: nvidia
     deploy:
       resources:
