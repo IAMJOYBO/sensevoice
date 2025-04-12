@@ -7,6 +7,7 @@ services:
       - TZ=Asia/Shanghai
       - HF_HOME=/app
       - MODELSCOPE_CACHE=/app
+      - GRADIO_SERVER_NAME="0.0.0.0"
       # - NVIDIA_VISIBLE_DEVICES=0
     volumes:
       - ./:/app/sensevoice
@@ -28,6 +29,7 @@ services:
     restart: no
     networks:
       - sensevoice
+    entrypoint: ["python", "webui.py", "--listen"]
 
 networks:
   sensevoice:
