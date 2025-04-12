@@ -11,7 +11,7 @@ WORKDIR /app
 RUN git clone --recurse-submodules https://github.com/Akegarasu/lora-scripts
 
 WORKDIR /app/lora-scripts
-RUN pip install xformers==0.0.27.post2 --no-deps && pip install -U -r requirements.txt
+RUN pip uninstall -y einops && pip install xformers==0.0.27.post2 --no-deps && pip install -U -r requirements.txt
 
 RUN pip install opencv-fixer==0.2.5 && python -c "from opencv_fixer import AutoFix; AutoFix()" \
     pip install opencv-python-headless && apt install ffmpeg libsm6 libxext6 libgl1 -y
