@@ -1,15 +1,15 @@
 services:
-  lota-scripts:
-    image: registry.cn-hangzhou.aliyuncs.com/joybo/lota-scripts:v2025.4.12-action
-    container_name: lota-scripts
-    hostname: lota-scripts
+  sensevoice:
+    image: registry.cn-hangzhou.aliyuncs.com/joybo/sensevoice:v2025.4.12-action
+    container_name: sensevoice
+    hostname: sensevoice
     environment:
       - TZ=Asia/Shanghai
       # - NVIDIA_VISIBLE_DEVICES=0
     volumes:
-      - ./:./app/lora-scripts
+      - ./:./app/sensevoice
     ports:
-      - "28000:28000"
+      - "50000:50000"
     runtime: nvidia
     deploy:
       resources:
@@ -22,9 +22,9 @@ services:
     tty: true
     restart: no
     networks:
-      - lora-scripts
+      - sensevoice
 
 networks:
-  lora-scripts:
+  sensevoice:
     driver: bridge
-    name: lora-scripts
+    name: sensevoice
