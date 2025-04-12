@@ -1,6 +1,6 @@
 services:
   sensevoice:
-    image: registry.cn-hangzhou.aliyuncs.com/joybo/sensevoice:v2025.4.12-action
+    image: registry.cn-hangzhou.aliyuncs.com/joybo/sensevoice:v2025.4.13-action
     container_name: sensevoice
     hostname: sensevoice
     environment:
