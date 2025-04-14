@@ -5,12 +5,10 @@ ENV TZ=Asia/Shanghai
 
 RUN mkdir -p /app
 WORKDIR /app
-RUN apt update && apt install -y wget curl net-tools tree git git-lfs 
+RUN apt update && apt install -y wget curl net-tools tree git git-lfs && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN git clone https://github.com/FunAudioLLM/SenseVoice.git
 WORKDIR /app/SenseVoice
-RUN pip install -r requirements.txt
-
-RUN rm -rf /var/lib/apt/lists/*
+RUN pip install -r requirements.txt && pip cache pruge
 
 CMD ["python", "webui.py"]
