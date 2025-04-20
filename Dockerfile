@@ -9,6 +9,6 @@ RUN apt update && apt install -y wget curl net-tools tree git git-lfs && apt-get
 
 RUN git clone https://github.com/FunAudioLLM/SenseVoice.git
 WORKDIR /app/SenseVoice
-RUN pip install -r requirements.txt && sudo rm -rf /root/.config/pip/*
+RUN pip install -r requirements.txt && rm -rf /root/.config/pip/*
 
 CMD ["python", "webui.py"]
