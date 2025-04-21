@@ -8,7 +8,7 @@ docker pull registry.cn-hangzhou.aliyuncs.com/joybo/sensevoice:latest
 ```bash
 git clone https://github.com/FunAudioLLM/SenseVoice.git
 cd SenseVoice
-modelscope download --model iic/SenseVoiceSmall --local_dir ./iic/SenseVoiceSmall
+modelscope download --model iic/SenseVoiceSmall --local_dir ./models/iic/SenseVoiceSmall
 ```
 将 SenseVoice 映射至 Docker 中的 /app/sensevoice 即可，默认端口：7860
 # 更多用法
