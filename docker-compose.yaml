@@ -5,7 +5,7 @@ services:
     hostname: sensevoice
     environment:
       - TZ=Asia/Shanghai
-      - HF_HOME=/app
+      - HF_HOME=/app/sensevoice/models
       - MODELSCOPE_CACHE=/app/sensevoice/models
       - GRADIO_SERVER_NAME=0.0.0.0
       - GRADIO_SERVER_PORT=7860
